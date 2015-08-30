@@ -1,11 +1,22 @@
 <?php
 
-
 $mem = getmeminfo();
 $cpu = getcpustat();
 $disk = getdiskusage();
-$sysinfo = array('CPUSTAT' => $cpu,'MEMINFO' => $mem,'DISKINFO' => $disk);
-echo json_encode($sysinfo);
+$time = time();
+$sysinfo = array('TIME' => $time,'CPUSTAT' => $cpu,'MEMINFO' => $mem,'DISKINFO' => $disk);
+$sysinfo_json = json_encode($sysinfo);
+$filepath = 'system_performance_monitor.json';
+//echo $sysinfo_json;
+sysinfosave($filepath, $sysinfo_json);
+echo file_get_contents($filepath);
+
+function sysinfosave($filepath, $sysinfo_json)
+{
+    $fopen = fopen($filepath, 'a') or die('File error !');
+    fwrite($fopen, $sysinfo_json);
+    fclose($fopen);
+}
 
 /* DESK STAT*/
 function getdiskusage()
