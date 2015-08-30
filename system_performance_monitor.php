@@ -17,11 +17,13 @@ function getdiskusage()
                 /* Pass the head line . This will never run while there was a if_preg_match*/
             continue;
             }
-            $tmp = array('1K-blocks' => (int) $matches[2],
-            'Used' => (int) $matches[3],
-            'Avaliable' => (int) $matches[4],
-            'Used_percent' => (int) $matches[5],
-            'Mounted_on' => $matches[6], );
+            $tmp = array(
+              '1K-blocks' => (int) $matches[2],
+              'Used' => (int) $matches[3],
+              'Avaliable' => (int) $matches[4],
+              'Used_percent' => (int) $matches[5],
+              'Mounted_on' => $matches[6],
+              );
 
             $diskfilesystem[$matches[1]] = $tmp;
         }
@@ -53,15 +55,16 @@ function getcpustat()
         $exploded = explode(' ', $value);
         $i = $exploded[0];
 
-        //$tmp = array( 'USER' => (int) $exploded[1],'NICE' = (int) $exploded[2]);
-
-        $cpustat[$i]['USER'] = (int) $exploded[1];
-        $cpustat[$i]['NICE'] = (int) $exploded[2];
-        $cpustat[$i]['SYS'] = (int) $exploded[3];
-        $cpustat[$i]['IDLE'] = (int) $exploded[4];
-        $cpustat[$i]['IOWAIT'] = (int) $exploded[5];
-        $cpustat[$i]['IRQ'] = (int) $exploded[6];
-        $cpustat[$i]['SIRQ'] = (int) $exploded[7];
+        $tmp = array(
+          'USER' => (int) $exploded[1],
+          'NICE' => (int) $exploded[2],
+          'SYS' => (int) $exploded[3],
+          'IDLE' => (int) $exploded[4],
+          'IOWAIT' => (int) $exploded[5],
+          'IRQ' => (int) $exploded[6],
+          'SIRQ' => (int) $exploded[7],
+          );
+        $cpustat[$i] = $tmp;
         $cpustat[$i]['TOTAL'] = array_sum($cpustat[$i]);
     }
 
