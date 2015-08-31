@@ -36,7 +36,7 @@ function sysinfosave($filepath, $sysinfo_json)
     fclose($fopen);
 }
 
-/* DESK STAT*/
+/* DISK STAT*/
 function getdiskusage()
 {
     exec('df', $dfoutput);
