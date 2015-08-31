@@ -5,10 +5,10 @@ $readcpustathistory = 5;
 $threshold_times = 3;//CPU warning threshold of last count
 $threshold_percent = 10;//CPU warning threshold of IDLE remain
 exec("tail -n $readcpustathistory $filepath", $system_performance_monitor);
-$i = 0;
+$i = min(count($system_performance_monitor), $readcpustathistory) - 1;
 foreach ($system_performance_monitor as $key => $value) {
     $monitor[$i] = json_decode($value, true);
-    ++$i;
+    --$i;
 }
 
 $time = $monitor[0]['TIME'];
@@ -17,22 +17,33 @@ $error_description = $error_description.memcheck($monitor);
 $error_description = $error_description.dfcheck($monitor);
 $error_description = $error_description.cpucheck($monitor, $threshold_times, $threshold_percent);
 
+/* Error Message OUTPUT START*/
     if ($error_description) {
         $error_messages = array('time' => $time ,'error_code' => 1, 'error_description' => $error_description);
-
         echo json_encode($error_messages);
     } else {
         $error_messages = array('time' => $time ,'error_code' => 0, 'error_description' => 'Your system running normally.');
-
         echo json_encode($error_messages);
     }
+/* Error Message OUTPUT END*/
+
+/* ------------------function------------------ */
 
 function memcheck($monitor)
 {
-    if ($monitor[0]['MEMINFO']['SwapTotal'] != $monitor[0]['MEMINFO']['SwapFree']) {
+    if ($monitor[0]['MEMFREE']['swap_used'] > $monitor[1]['MEMFREE']['swap_used']) {
         return 'Swap has been used .You system may be out of memory .';
     } //else {echo 'Memory use normally.';}
 }
+
+/* Old function use meminfo
+function memcheck($monitor)
+{
+   if ($monitor[0]['MEMINFO']['SwapTotal'] != $monitor[0]['MEMINFO']['SwapFree']) {
+        return 'Swap has been used .You system may be out of memory .';
+    } //else {echo 'Memory use normally.';}
+}
+*/
 
 function dfcheck($monitor)
 {
