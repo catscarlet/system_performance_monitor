@@ -61,11 +61,12 @@ function cpucheck($monitor, $threshold_times, $threshold_percent)
         foreach ($monitorhistory['CPUSTAT'] as $cpuid => $cpustat) {
             $cpu_idlepercent = $cpustat['IDLE'] / $cpustat['TOTAL'] * 100;
             if ($cpu_idlepercent < $threshold_percent) {
+                /*Add 1 to $cpu_warning_count .if $cpu_warning_count is equal or greater than $threshold  ,it means the warning last $threshold times.*/
                 ++$cpu_warning_count;
             }
         }
     }
-    /*Add 1 to $cpu_warning_count .if $cpu_warning_count is equal or greater than $threshold  ,it means the warning last $threshold times.*/
+
     if ($cpu_warning_count >= $threshold_times) {
         return 'CPU_IDLE may be less than 10% since last '.$threshold_times.' times check.';
     }
