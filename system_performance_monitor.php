@@ -17,6 +17,7 @@ $sysinfo = array(
 $sysinfo_json = json_encode($sysinfo);
 $filepath = 'monitor.json';
 //echo $sysinfo_json;
+jsonlogrotate($filepath);
 sysinfosave($filepath, $sysinfo_json);
 //sysinfoecho($filepath);
 
@@ -34,6 +35,28 @@ function sysinfosave($filepath, $sysinfo_json)
     fwrite($fopen, $sysinfo_json);
     fwrite($fopen, "\n");
     fclose($fopen);
+}
+
+/* logrotate */
+function jsonlogrotate($filepath)
+{
+    $filepath_new = $filepath.'_new';
+    exec("wc -l $filepath", $wc);
+    preg_match('/(\d+)\s+(\S+)/', $wc[0], $match);
+    $filelinecount = $match[1];
+    if ($filelinecount > 480) {
+        exec("tail -n 5 $filepath", $system_performance_monitor);
+
+        $fopen = fopen($filepath_new, 'w') or die('File error !');
+        foreach ($system_performance_monitor as $key => $value) {
+            fwrite($fopen, $value);
+            fwrite($fopen, "\n");
+        }
+        fclose($fopen);
+        copy($filepath, $filepath.'_old');
+        //exec('tar zcvf .'.$filepath.'_old '.$filepath.'_old');
+        copy ($filepath_new,$filepath);
+    }
 }
 
 /* DISK STAT*/
