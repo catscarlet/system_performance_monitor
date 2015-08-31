@@ -1,7 +1,7 @@
 <?php
 
 $time = time();
-$mem = getmeminfo();
+$mem = getmemfree();
 $cpu = getcpustat();
 $disk = getdiskusage();
 $psinfo = getps();
@@ -9,9 +9,9 @@ $psinfo = getps();
 $sysinfo = array(
   'TIME' => $time,
   'CPUSTAT' => $cpu,
-  'MEMINFO' => $mem,
+  'MEMFREE' => $mem,
   'DISKINFO' => $disk,
-  'PSINFO' => $psinfo
+  'PSINFO' => $psinfo,
 );
 
 $sysinfo_json = json_encode($sysinfo);
@@ -85,6 +85,31 @@ function getdiskusage()
 }
 
 /* MEMORY STAT*/
+function getmemfree()
+{
+    exec('free', $memfreeoutput);
+    preg_match('/\S+:\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)/', $memfreeoutput[1], $mem_matches);
+    preg_match('/\-\/\+\sbuffers\/cache:\s+(\d+)\s+(\d+)/', $memfreeoutput[2], $buffers_matches);
+    preg_match('/Swap:\s+(\d+)\s+(\d+)\s+(\d+)/', $memfreeoutput[3], $swap_matches);
+    $tmp = array(
+    'total' => $mem_matches[1],
+    'used' => $mem_matches[2],
+    'free' => $mem_matches[3],
+    'shared' => $mem_matches[4],
+    'buffers' => $mem_matches[5],
+    'cached' => $mem_matches[6],
+    'buffers_used' => $buffers_matches[1],
+    'buffers_free' => $buffers_matches[2],
+    'swap_total' => $swap_matches[1],
+    'swap_used' => $swap_matches[2],
+    'swap_free' => $swap_matches[3],
+  );
+    $memfree = $tmp;
+
+    return $memfree;
+}
+
+/* OLD meminfo function
 function getmeminfo()
 {
     exec('cat /proc/meminfo |grep "MemTotal\|MemFree\|SwapTotal\|SwapFree" ', $procmeminfo);
@@ -95,7 +120,7 @@ function getmeminfo()
 
     return $meminfo;
 }
-
+*/
 /* CPU STAT*/
 function getcpustat()
 {
