@@ -60,7 +60,7 @@ function jsonlogrotate($filepath)
         fclose($fopen);
         copy($filepath, $filepath.'_old');
         //exec('tar zcvf .'.$filepath.'_old '.$filepath.'_old');
-        copy ($filepath_new,$filepath);
+        copy($filepath_new, $filepath);
     }
 }
 
