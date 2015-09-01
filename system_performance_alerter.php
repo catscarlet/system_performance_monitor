@@ -25,6 +25,7 @@ $error_description = $error_description.cpucheck($monitor, $threshold_times, $th
         $error_messages = array('time' => $time ,'error_code' => 0, 'error_description' => 'Your system running normally.');
         echo json_encode($error_messages);
     }
+    echo "\n";
 /* Error Message OUTPUT END*/
 
 /* ------------------function------------------ */
