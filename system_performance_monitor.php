@@ -17,7 +17,12 @@ $sysinfo = array(
 $sysinfo_json = json_encode($sysinfo);
 $filepath = 'monitor.json';
 //echo $sysinfo_json;
-jsonlogrotate($filepath);
+
+
+if (file_exists($filepath)) {
+    jsonlogrotate($filepath);
+}
+
 sysinfosave($filepath, $sysinfo_json);
 //sysinfoecho($filepath);
 
@@ -55,7 +60,7 @@ function jsonlogrotate($filepath)
         fclose($fopen);
         copy($filepath, $filepath.'_old');
         //exec('tar zcvf .'.$filepath.'_old '.$filepath.'_old');
-        copy ($filepath_new,$filepath);
+        copy($filepath_new, $filepath);
     }
 }
 
