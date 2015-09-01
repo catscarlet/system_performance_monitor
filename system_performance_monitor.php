@@ -17,7 +17,12 @@ $sysinfo = array(
 $sysinfo_json = json_encode($sysinfo);
 $filepath = 'monitor.json';
 //echo $sysinfo_json;
-jsonlogrotate($filepath);
+
+
+if (file_exists($filepath)) {
+    jsonlogrotate($filepath);
+}
+
 sysinfosave($filepath, $sysinfo_json);
 //sysinfoecho($filepath);
 
