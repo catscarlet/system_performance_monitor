@@ -25,5 +25,5 @@ function sendemailbysmtp($mailtitle = 'This is a PHP&SMTP mail powered by email.
         echo 'Send mail failed';
         exit();
     }
-    echo 'Send mail successfully';
+    //echo 'Send mail successfully';
 }
