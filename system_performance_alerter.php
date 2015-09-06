@@ -21,6 +21,11 @@ $error_description = $error_description.cpucheck($monitor, $threshold_times, $th
 /* Error Message OUTPUT START*/
     if ($error_description) {
         $error_messages = array('time' => $time ,'error_code' => 1, 'error_description' => $error_description);
+
+        /* send email */
+        require_once 'smtp/sendmail.php';
+        sendemailbysmtp("Your server may have performance problems",$error_description);
+
         echo json_encode($error_messages);
     } else {
         $error_messages = array('time' => $time ,'error_code' => 0, 'error_description' => 'Your system running normally.');
