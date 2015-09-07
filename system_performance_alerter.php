@@ -2,7 +2,7 @@
 
 $filepath = 'monitor.json';
 $readcpustathistory = 5;
-$threshold_times = 3;//CPU warning threshold of last count
+$threshold_times = 2;//CPU warning threshold of last count
 $threshold_percent = 10;//CPU warning threshold of IDLE remain
 exec("tail -n $readcpustathistory $filepath", $system_performance_monitor);
 $readhistorymax = min(count($system_performance_monitor), $readcpustathistory);
@@ -59,7 +59,7 @@ function cpucheck($monitor, $threshold_times, $threshold_percent)
     $cpu_warning_count = 0;
     foreach ($monitor as $monitorhistoryID => $monitorhistory) {
         foreach ($monitorhistory['CPUSTAT'] as $cpuid => $cpustat) {
-            $cpu_idlepercent = $cpustat['IDLE'] / $cpustat['TOTAL'] * 100;
+            $cpu_idlepercent = $cpustat['idle'];
             if ($cpu_idlepercent < $threshold_percent) {
                 /*Add 1 to $cpu_warning_count .if $cpu_warning_count is equal or greater than $threshold  ,it means the warning last $threshold times.*/
                 ++$cpu_warning_count;
@@ -68,6 +68,6 @@ function cpucheck($monitor, $threshold_times, $threshold_percent)
     }
 
     if ($cpu_warning_count >= $threshold_times) {
-        return 'CPU_IDLE may be less than 10% since last '.$threshold_times.' times check.';
+        return 'CPU_IDLE may be less than '.$threshold_percent.' since last '.$threshold_times.' times check.';
     }
 }
