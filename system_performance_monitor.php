@@ -16,15 +16,12 @@ $sysinfo = array(
 
 $sysinfo_json = json_encode($sysinfo);
 $filepath = 'monitor.json';
-//echo $sysinfo_json;
-
 
 if (file_exists($filepath)) {
     jsonlogrotate($filepath);
 }
 
 sysinfosave($filepath, $sysinfo_json);
-//sysinfoecho($filepath);
 
 /*ECHO FROM FILE*/
 function sysinfoecho($filepath)
@@ -59,7 +56,6 @@ function jsonlogrotate($filepath)
         }
         fclose($fopen);
         copy($filepath, $filepath.'_old');
-        //exec('tar zcvf .'.$filepath.'_old '.$filepath.'_old');
         copy($filepath_new, $filepath);
     }
 }
@@ -114,18 +110,6 @@ function getmemfree()
     return $memfree;
 }
 
-/* OLD meminfo function
-function getmeminfo()
-{
-    exec('cat /proc/meminfo |grep "MemTotal\|MemFree\|SwapTotal\|SwapFree" ', $procmeminfo);
-    foreach ($procmeminfo as $key => $value) {
-        preg_match('/(\w+):\s+(\d+) /', $value, $matches);
-        $meminfo[$matches[1]] = (int) $matches[2];
-    }
-
-    return $meminfo;
-}
-*/
 /* CPU STAT*/
 function getcpustat()
 {

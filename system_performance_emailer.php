@@ -12,7 +12,5 @@ foreach ($system_performance_monitor as $key => $value) {
     $monitor[$i] = json_decode($value, true);
 }
 $system_performance_info = format_json($value);
-//$system_performance_info="this is a text";
 $time = $monitor[0]['TIME'];
 sendemailbysmtp('Your system_performance_info at '.date('F j, Y, g:i a', $time), $system_performance_info);
-//echo $system_performance_info;

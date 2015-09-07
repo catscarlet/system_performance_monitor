@@ -24,7 +24,7 @@ $error_description = $error_description.cpucheck($monitor, $threshold_times, $th
 
         /* send email */
         require_once 'smtp/sendmail.php';
-        sendemailbysmtp("Your server may have performance problems",$error_description);
+        sendemailbysmtp('Your server may have performance problems', $error_description);
 
         echo json_encode($error_messages);
     } else {
@@ -41,18 +41,9 @@ function memcheck($monitor, $readhistorymax)
     if ($readhistorymax > 1) {
         if ($monitor[0]['MEMFREE']['swap_used'] > $monitor[1]['MEMFREE']['swap_used']) {
             return 'Swap has been used .You system may be out of memory .';
-        } //else {echo 'Memory use normally.';}
+        }
     }
 }
-
-/* Old function use meminfo
-function memcheck($monitor)
-{
-   if ($monitor[0]['MEMINFO']['SwapTotal'] != $monitor[0]['MEMINFO']['SwapFree']) {
-        return 'Swap has been used .You system may be out of memory .';
-    } //else {echo 'Memory use normally.';}
-}
-*/
 
 function dfcheck($monitor)
 {
