@@ -115,23 +115,18 @@ function getcpustat()
 {
     exec('nproc', $nproc);
     $nproc = $nproc[0];
-    exec('cat /proc/stat|grep "^cpu"|tail -n '.$nproc, $procstat);
-//need to rewrite
-    foreach ($procstat as $key => $value) {
-        $exploded = explode(' ', $value);
-        $i = $exploded[0];
 
-        $tmp = array(
-          'USER' => (int) $exploded[1],
-          'NICE' => (int) $exploded[2],
-          'SYS' => (int) $exploded[3],
-          'IDLE' => (int) $exploded[4],
-          'IOWAIT' => (int) $exploded[5],
-          'IRQ' => (int) $exploded[6],
-          'SIRQ' => (int) $exploded[7],
-          );
-        $cpustat[$i] = $tmp;
-        $cpustat[$i]['TOTAL'] = array_sum($cpustat[$i]);
+    for ($i = 0; $i < $nproc; ++$i) {
+        unset($sarcpuoutput);
+        exec('sar -P '.$i.' |tail -n 2', $sarcpuoutput);
+        preg_match('/\d\d:\d\d:\d\d\s+\S+\s+\d+\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)/', $sarcpuoutput[0], $sarcpuarray);
+        $tmp = array('user' => (int) $sarcpuarray[1],
+                'nice' => (int) $sarcpuarray[2],
+                'sys' => (int) $sarcpuarray[3],
+                'io' => (int) $sarcpuarray[4],
+                'steal' => (int) $sarcpuarray[5],
+                'idle' => (int) $sarcpuarray[6], );
+        $cpustat['cpu'.$i] = $tmp;
     }
 
     return $cpustat;
