@@ -1,6 +1,6 @@
 <?php
 
-function sendemailbysmtp($mailtitle , $mailcontent ,$smtpemailto)
+function sendemailbysmtp($mailtitle, $mailcontent, $smtpemailto)
 {
     require_once 'email.class.php';
     //******************** 配置信息 ********************************
@@ -23,7 +23,8 @@ function sendemailbysmtp($mailtitle , $mailcontent ,$smtpemailto)
 
     if ($state == '') {
         echo 'Send mail failed';
-        exit();
+        //exit();
+    } else {
+        echo 'Send mail successfully';
     }
-    //echo 'Send mail successfully';
 }
