@@ -1,6 +1,6 @@
 <?php
 
-function sendemailbysmtp($mailtitle = 'This is a PHP&SMTP mail powered by email.class.php', $mailcontent = 'This is a PHP&SMTP mail powered by email.class.php')
+function sendemailbysmtp($mailtitle , $mailcontent ,$smtpemailto)
 {
     require_once 'email.class.php';
     //******************** 配置信息 ********************************
@@ -8,7 +8,7 @@ function sendemailbysmtp($mailtitle = 'This is a PHP&SMTP mail powered by email.
     $smtpserverport = 25;//SMTP服务器端口
     $smtpusermail = 'Sender Email address';//SMTP服务器的用户邮箱
     //$smtpemailto = $_POST['toemail'];//发送给谁
-    $smtpemailto = 'Receive Email address';//发送给谁
+    //$smtpemailto = 'Receive Email address';//发送给谁
     $smtpuser = 'Sender USERNAME';//SMTP服务器的用户帐号
     $smtppass = 'Sender PASSWORD';//SMTP服务器的用户密码
     //$mailtitle = $_POST['title'];//邮件主题
