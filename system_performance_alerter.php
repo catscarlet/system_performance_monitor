@@ -24,7 +24,7 @@ $error_description = $error_description.cpucheck($monitor, $threshold_times, $th
 
         /* send email */
         require_once 'smtp/sendmail.php';
-        sendemailbysmtp("Your server may have performance problems",$error_description);
+        sendemailbysmtp("Your server may have performance problems",$error_description,'Receive Email address');
 
         echo json_encode($error_messages);
     } else {
