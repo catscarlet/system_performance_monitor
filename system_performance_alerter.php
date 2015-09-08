@@ -61,8 +61,11 @@ function cpucheck($monitor, $threshold_times, $threshold_percent)
         foreach ($monitorhistory['CPUSTAT'] as $cpuid => $cpustat) {
             $cpu_idlepercent = $cpustat['idle'];
             if ($cpu_idlepercent < $threshold_percent) {
-                /*Add 1 to $cpu_warning_count .if $cpu_warning_count is equal or greater than $threshold  ,it means the warning last $threshold times.*/
-                ++$cpu_warning_count;
+              /* Check if sar output nothing at 00:00 */
+                if ($cpustat['user'] != 0 || $cpustat['sys'] != 0 || $cpustat['io'] != 0 || $cpustat['idle'] != 0) {
+                  /*Add 1 to $cpu_warning_count .if $cpu_warning_count is equal or greater than $threshold  ,it means the warning last $threshold times.*/
+                    ++$cpu_warning_count;
+                }
             }
         }
     }
