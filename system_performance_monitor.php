@@ -1,5 +1,5 @@
 <?php
-
+require 'config.inc.php';
 $time = time();
 $mem = getmemfree();
 $cpu = getcpustat();
@@ -15,7 +15,7 @@ $sysinfo = array(
 );
 
 $sysinfo_json = json_encode($sysinfo);
-$filepath = 'monitor.json';
+
 
 if (file_exists($filepath)) {
     jsonlogrotate($filepath);

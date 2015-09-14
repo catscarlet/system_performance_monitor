@@ -2,7 +2,8 @@
 
 require_once 'json-format/format_json.php';
 require_once 'smtp/sendmail.php';
-$filepath = 'monitor.json';
+require 'config.inc.php';
+
 $readcpustathistory = 1;
 exec("tail -n $readcpustathistory $filepath", $system_performance_monitor);
 $readhistorymax = min(count($system_performance_monitor), $readcpustathistory);
