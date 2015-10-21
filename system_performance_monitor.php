@@ -1,4 +1,5 @@
 <?php
+
 require 'config.inc.php';
 $time = time();
 $mem = getmemfree();
@@ -15,7 +16,6 @@ $sysinfo = array(
 );
 
 $sysinfo_json = json_encode($sysinfo);
-
 
 if (file_exists($filepath)) {
     jsonlogrotate($filepath);
@@ -89,22 +89,45 @@ function getdiskusage()
 function getmemfree()
 {
     exec('free', $memfreeoutput);
-    preg_match('/\S+:\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)/', $memfreeoutput[1], $mem_matches);
-    preg_match('/\-\/\+\sbuffers\/cache:\s+(\d+)\s+(\d+)/', $memfreeoutput[2], $buffers_matches);
-    preg_match('/Swap:\s+(\d+)\s+(\d+)\s+(\d+)/', $memfreeoutput[3], $swap_matches);
-    $tmp = array(
-    'total' => $mem_matches[1],
-    'used' => $mem_matches[2],
-    'free' => $mem_matches[3],
-    'shared' => $mem_matches[4],
-    'buffers' => $mem_matches[5],
-    'cached' => $mem_matches[6],
-    'buffers_used' => $buffers_matches[1],
-    'buffers_free' => $buffers_matches[2],
-    'swap_total' => $swap_matches[1],
-    'swap_used' => $swap_matches[2],
-    'swap_free' => $swap_matches[3],
-  );
+    $tmp = null;
+    foreach ($memfreeoutput as $key => $value) {
+        if (preg_match('/\S+:\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)/', $value, $tmp)) {
+            $mem_matches = $tmp;
+        } elseif (preg_match('/\-\/\+\sbuffers\/cache:\s+(\d+)\s+(\d+)/', $value, $tmp)) {
+            $buffers_matches = $tmp;
+        } elseif (preg_match('/Swap:\s+(\d+)\s+(\d+)\s+(\d+)/', $value, $tmp)) {
+            $swap_matches = $tmp;
+        }
+    }
+
+    if (!isset($buffers_matches)) {
+        $tmp = array(
+      'Mem_total' => $mem_matches[1],
+      'Mem_used' => $mem_matches[2],
+      'Mem_free' => $mem_matches[3],
+      'Mem_shared' => $mem_matches[4],
+      'Mem_buffers' => $mem_matches[5],
+      'Mem_cached' => $mem_matches[6],
+      'Swap_total' => $swap_matches[1],
+      'Swap_used' => $swap_matches[2],
+      'Swap_free' => $swap_matches[3],
+    );
+    } else {
+        $tmp = array(
+      'Mem_total' => $mem_matches[1],
+      'Mem_used' => $mem_matches[2],
+      'Mem_free' => $mem_matches[3],
+      'Mem_shared' => $mem_matches[4],
+      'Mem_buffers' => $mem_matches[5],
+      'Mem_cached' => $mem_matches[6],
+      'Buffers_used' => $buffers_matches[1],
+      'Buffers_free' => $buffers_matches[2],
+      'Swap_total' => $swap_matches[1],
+      'Swap_used' => $swap_matches[2],
+      'Swap_free' => $swap_matches[3],
+    );
+    }
+
     $memfree = $tmp;
 
     return $memfree;
