@@ -16,9 +16,9 @@ foreach ($system_performance_monitor as $key => $value) {
 
 $time = $monitor[0]['TIME'];
 
-$error_description = $error_description.memcheck($monitor, $readhistorymax);
-$error_description = $error_description.dfcheck($monitor);
-$error_description = $error_description.cpucheck($monitor, $threshold_times, $threshold_percent);
+$error_description .= memcheck($monitor, $readhistorymax);
+$error_description .= dfcheck($monitor);
+$error_description .= cpucheck($monitor, $threshold_times, $threshold_percent);
 
 /* Error Message OUTPUT START*/
     if ($error_description) {
